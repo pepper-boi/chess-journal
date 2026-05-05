@@ -18,90 +18,27 @@
   ]);
 </script>
 
-<div class="overlay" role="dialog" aria-modal="true" aria-label="Choose promotion piece">
-  <div class="modal">
-    <p class="title">Promote pawn</p>
-    <div class="choices">
+<div
+  class="absolute inset-0 z-10 flex items-center justify-center bg-gray-950/75 backdrop-blur-sm"
+  role="dialog" aria-modal="true" aria-label="Choose promotion piece"
+>
+  <div class="flex flex-col items-center gap-4 bg-gray-900 border border-indigo-500/20 rounded-xl px-7 py-6 shadow-2xl">
+    <p class="text-[0.6rem] font-bold tracking-[0.14em] uppercase text-slate-600">Promote pawn</p>
+    <div class="flex gap-2">
       {#each pieces as { piece, label, symbol }}
         <button
-          class="choice"
           onclick={() => onChoose(piece)}
           aria-label={label}
           title={label}
+          class="flex flex-col items-center gap-1.5 px-4 py-3 rounded-lg
+            border border-white/8 bg-white/[0.03] text-slate-200
+            hover:bg-indigo-500/15 hover:border-indigo-500/40 hover:-translate-y-0.5
+            transition-all duration-100"
         >
-          <span class="symbol">{symbol}</span>
-          <span class="label">{label}</span>
+          <span class="text-4xl leading-none">{symbol}</span>
+          <span class="text-[0.58rem] font-bold tracking-widest uppercase text-slate-600">{label}</span>
         </button>
       {/each}
     </div>
   </div>
 </div>
-
-<style>
-  .overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(10, 8, 5, 0.72);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-  }
-
-  .modal {
-    border-radius: 4px;
-    padding: 1.5rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.25rem;
-    box-shadow: 0 24px 64px rgba(0,0,0,0.2);
-  }
-
-  .title {
-    font-family: var(--font-display);
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin: 0;
-  }
-
-  .choices {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .choice {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.35rem;
-    background: var(--surface-raised);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    padding: 0.75rem 0.9rem;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, transform 0.1s;
-    color: var(--text);
-  }
-
-  .choice:hover {
-    background: var(--accent-muted);
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-
-  .symbol {
-    font-size: 2rem;
-    line-height: 1;
-  }
-
-  .label {
-    font-family: var(--font-display);
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-</style>

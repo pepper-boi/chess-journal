@@ -16,120 +16,82 @@
   } = $props();
 </script>
 
-<div class="move-area">
+<div class="flex flex-col gap-px">
+
+  {#if pairedMoves.length === 0}
+    <div class="flex flex-col items-center gap-2 py-8 text-slate-700">
+      <span class="text-3xl opacity-30">♙</span>
+      <span class="text-xs">Make a move to begin</span>
+    </div>
+  {/if}
+
   {#each pairedMoves as { n, white, black }, i}
-    <div class="move-row">
-      <span class="move-num">{n}.</span>
+    <div class="flex items-center gap-0.5 px-0.5 rounded
+      {currentIndex === i * 2 + 1 || currentIndex === i * 2 + 2 ? 'bg-indigo-500/5' : ''}">
+
+      <span class="w-6 text-right text-[0.65rem] text-slate-600 shrink-0 pr-1 tabular-nums select-none">
+        {n}
+      </span>
+
       <button
-        class="move"
-        class:active={currentIndex === i * 2 + 1}
         onclick={() => onGoToMove(i * 2 + 1)}
-      >
-        {white.san}
-      </button>
+        class="flex-1 text-left px-1.5 py-0.5 rounded text-[0.82rem] font-mono transition-colors
+          {currentIndex === i * 2 + 1
+            ? 'bg-indigo-500/20 text-indigo-200 font-semibold border border-indigo-500/35'
+            : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'}"
+      >{white.san}</button>
 
       {#if !notes[i * 2 + 1] && black}
         <button
-          class="move"
-          class:active={currentIndex === i * 2 + 2}
           onclick={() => onGoToMove(i * 2 + 2)}
-        >
-          {black.san}
-        </button>
+          class="flex-1 text-left px-1.5 py-0.5 rounded text-[0.82rem] font-mono transition-colors
+            {currentIndex === i * 2 + 2
+              ? 'bg-indigo-500/20 text-indigo-200 font-semibold border border-indigo-500/35'
+              : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'}"
+        >{black.san}</button>
+      {:else if !black}
+        <span class="flex-1"></span>
       {/if}
     </div>
 
     {#if currentIndex === i * 2 + 1}
-      <NoteInput
-        value={notes[i * 2 + 1] ?? ''}
-        onChange={(value) => onNoteChange(i * 2 + 1, value)}
-      />
+      <NoteInput value={notes[i * 2 + 1] ?? ''} onChange={(v) => onNoteChange(i * 2 + 1, v)} />
     {:else if notes[i * 2 + 1]}
       <button
-        class="note-text clickable"
         onclick={() => onGoToMove(i * 2 + 1)}
+        class="flex items-baseline gap-1.5 w-full text-left px-2 py-1 my-0.5 rounded-r border-l-2 border-yellow-500/40 bg-yellow-500/7 text-yellow-700 hover:bg-yellow-500/12 transition-colors text-[0.72rem] leading-snug"
       >
+        <span class="text-[0.55rem] font-bold tracking-widest uppercase text-yellow-600/50 shrink-0">note</span>
         {notes[i * 2 + 1]}
       </button>
     {/if}
 
     {#if notes[i * 2 + 1] && black}
-      <div class="move-row">
-        <span class="move-num">{n}.</span>
-        <span class="move-ellipsis">...</span>
+      <div class="flex items-center gap-0.5 px-0.5 rounded
+        {currentIndex === i * 2 + 2 ? 'bg-indigo-500/5' : ''}">
+        <span class="w-6 text-right text-[0.65rem] text-slate-600 shrink-0 pr-1 tabular-nums select-none">{n}</span>
+        <span class="px-1.5 py-0.5 text-[0.82rem] text-slate-600 select-none">…</span>
         <button
-          class="move"
-          class:active={currentIndex === i * 2 + 2}
           onclick={() => onGoToMove(i * 2 + 2)}
-        >
-          {black.san}
-        </button>
+          class="flex-1 text-left px-1.5 py-0.5 rounded text-[0.82rem] font-mono transition-colors
+            {currentIndex === i * 2 + 2
+              ? 'bg-indigo-500/20 text-indigo-200 font-semibold border border-indigo-500/35'
+              : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'}"
+        >{black.san}</button>
       </div>
     {/if}
 
     {#if currentIndex === i * 2 + 2}
-      <NoteInput
-        value={notes[i * 2 + 2] ?? ''}
-        onChange={(value) => onNoteChange(i * 2 + 2, value)}
-      />
+      <NoteInput value={notes[i * 2 + 2] ?? ''} onChange={(v) => onNoteChange(i * 2 + 2, v)} />
     {:else if notes[i * 2 + 2]}
       <button
-        class="note-text clickable"
         onclick={() => onGoToMove(i * 2 + 2)}
+        class="flex items-baseline gap-1.5 w-full text-left px-2 py-1 my-0.5 rounded-r border-l-2 border-yellow-500/40 bg-yellow-500/7 text-yellow-700 hover:bg-yellow-500/12 transition-colors text-[0.72rem] leading-snug"
       >
+        <span class="text-[0.55rem] font-bold tracking-widest uppercase text-yellow-600/50 shrink-0">note</span>
         {notes[i * 2 + 2]}
       </button>
     {/if}
+
   {/each}
 </div>
-
-<style>
-  .move-area {
-    height: min(calc(96vw - 2px), calc(92vh - 80px));
-    overflow-y: auto;
-    width: 25em;
-  }
-
-  .move-row {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-
-  .move-num { color: gray; width: 1.5rem; }
-
-  .move-ellipsis { color: gray; padding: 0.2rem 0.4rem; }
-
-  .move {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.2rem 0.4rem;
-    border-radius: 3px;
-  }
-
-  .move.active { background: rgba(201, 168, 76, 0.45); }
-
-  .note-text {
-    font-size: 0.78rem;
-    color: var(--text, #ccc);
-    background: rgba(201, 168, 76, 0.08);
-    border-left: 2px solid rgba(201, 168, 76, 0.5);
-    padding: 0.4rem 0.5rem;
-    margin: 0.25rem 0;
-    line-height: 1.5;
-    white-space: pre-wrap;
-  }
-
-  .note-text.clickable {
-    display: block;
-    width: 100%;
-    text-align: left;
-    border: none;
-    cursor: pointer;
-  }
-
-  .note-text.clickable:hover {
-    background: rgba(201, 168, 76, 0.15);
-  }
-</style>

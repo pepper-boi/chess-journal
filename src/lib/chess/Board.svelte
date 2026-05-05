@@ -68,7 +68,7 @@
   onDestroy(() => cg?.destroy());
 </script>
 
-<div class="board-area">
+<div class="relative">
   <div bind:this={boardEl} class="board"></div>
   {#if pendingPromotion}
     <PromotionModal color={promotionColor} onChoose={onPromotionChoice} />
@@ -76,21 +76,19 @@
 </div>
 
 <style>
-  .board-area { position: relative; }
-
   .board {
-    width: min(calc(96vw - 2px), calc(92vh - 80px));
-    height: min(calc(96vw - 2px), calc(92vh - 80px));
+    width: min(calc(96vw - 292px), calc(94vh - 132px));
+    height: min(calc(96vw - 280px), calc(94vh - 132px));
     display: block;
   }
 
-  :global(.cg-board square.light) { background: #e8d5a3; }
-  :global(.cg-board square.dark)  { background: #8b6343; }
-  :global(.cg-board square.last-move) { background: rgba(201, 168, 76, 0.45) !important; }
-  :global(.cg-board square.move-dest)::after { background: rgba(201, 168, 76, 0.55); }
-  :global(.cg-board square.oc.move-dest)::after { border-color: rgba(201, 168, 76, 0.7); }
-  :global(.cg-board square.selected) { background: rgba(201, 168, 76, 0.35) !important; }
+  :global(.cg-board square.light) { background: #ede0c8; }
+  :global(.cg-board square.dark)  { background: #7c5c3e; }
+  :global(.cg-board square.last-move)  { background: rgba(99,102,241,0.28) !important; }
+  :global(.cg-board square.selected)   { background: rgba(99,102,241,0.22) !important; }
+  :global(.cg-board square.move-dest)::after   { background: rgba(99,102,241,0.45); }
+  :global(.cg-board square.oc.move-dest)::after { border-color: rgba(99,102,241,0.6); }
   :global(.cg-board square.check) {
-    background: radial-gradient(ellipse at center, rgba(220,40,40,0.85) 0%, rgba(220,40,40,0) 70%) !important;
+    background: radial-gradient(ellipse at center, rgba(239,68,68,0.9) 0%, transparent 68%) !important;
   }
 </style>

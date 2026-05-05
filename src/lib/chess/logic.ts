@@ -2,6 +2,7 @@ import { Chess, type Square } from 'chess.js';
 import type { Color, Key } from 'chessground/types';
 
 export type PromotionPiece = 'q' | 'r' | 'b' | 'n';
+export type VerboseMove = { san: string; from: string; to: string; promotion?: string };
 
 export function toDests(chess: Chess): Map<Key, Key[]> {
   const dests = new Map<Key, Key[]>();
@@ -46,4 +47,23 @@ export function pairMoves(history: { san: string }[]) {
     pairs.push({ n: Math.floor(i / 2) + 1, white: history[i], black: history[i + 1] });
   }
   return pairs;
+}
+
+export function parsePgn(pgn: string): VerboseMove[] {
+  const c = new Chess();
+  c.loadPgn(pgn.trim());
+  return c.history({ verbose: true }).map(m => ({
+    san: m.san,
+    from: m.from,
+    to: m.to,
+    promotion: m.promotion,
+  }));
+}
+
+export function toPgn(moves: VerboseMove[]): string {
+  const c = new Chess();
+  for (const m of moves) {
+    c.move({ from: m.from as Square, to: m.to as Square, promotion: m.promotion });
+  }
+  return c.pgn();
 }
